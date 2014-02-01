@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="actionbar_home_width">52dp</dimen>
+    <dimen name="shadow_width">8dp</dimen>
+</resources>

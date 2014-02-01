@@ -1,0 +1,14 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mm="http://millennialmedia.com/android/schema"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+    android:orientation="vertical"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:id="@+id/phone_main">
+
+    <fragment class="co.wakarimasen.chanexplorer.PhoneHomeFragment"
+            android:id="@+id/phone_home_fragment"
+            android:layout_width="match_parent" android:layout_height="0dip"
+            android:tag="chanexplorer.HomeViewPager" android:layout_weight="1"
+             />
+
+</LinearLayout>

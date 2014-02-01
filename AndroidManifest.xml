@@ -1,0 +1,75 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="co.wakarimasen.chanexplorer"
+    android:versionCode="63"
+    android:versionName="2.2.3" >
+
+    <uses-sdk
+        android:minSdkVersion="10"
+        android:targetSdkVersion="19" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.Sherlock" >
+        <activity
+            android:name="co.wakarimasen.chanexplorer.MainActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="co.wakarimasen.chanexplorer.ACTION_VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="chanexplorer" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="co.wakarimasen.chanexplorer.FIX_POST" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <data
+                    android:host="boards.4chan.org"
+                    android:scheme="http" />
+                <category android:name="android.intent.category.DEFAULT"/> 
+  <category android:name="android.intent.category.BROWSABLE"/> 
+                
+
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+            
+            <intent-filter>
+                <data
+                    android:host="boards.4chan.org"
+                    android:scheme="https" />
+                <category android:name="android.intent.category.DEFAULT"/> 
+  <category android:name="android.intent.category.BROWSABLE"/> 
+                
+
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="co.wakarimasen.chanexplorer.PrefsActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="co.wakarimasen.chanexplorer.ImageViewer"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
+        </activity>
+   	
+        </application>
+    
+    	
+</manifest>

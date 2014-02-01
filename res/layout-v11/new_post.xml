@@ -1,0 +1,215 @@
+<co.wakarimasen.chanexplorer.NewPostView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#383838"
+    android:orientation="vertical"
+    android:descendantFocusability="beforeDescendants"
+	android:focusableInTouchMode="true" >
+    
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#222222"
+        android:paddingLeft="8dp"
+        android:layout_alignParentTop="true"
+        android:id="@+id/new_post_title_container"
+        >
+
+        <TextView
+            android:id="@+id/new_post_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_new_thread"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_gravity="center_vertical" />
+        
+    </FrameLayout>
+    
+     <FrameLayout
+         android:id="@+id/post_submit_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#222222"
+        android:paddingTop="4dp"
+        android:layout_alignParentBottom="true"
+        >
+
+        <Button
+            android:id="@+id/post_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="@string/text_submit" />
+        
+    </FrameLayout>
+    
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:fadingEdge="none"
+        android:layout_below="@id/new_post_title_container"
+        android:layout_above="@id/post_submit_container" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/post_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/form_name"
+                android:singleLine="true" />
+
+            <include
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/new_post_divider" />
+            
+            <EditText
+                android:id="@+id/post_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/form_email"
+                android:inputType="textEmailAddress"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp" />
+            
+            <include
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/new_post_divider" />
+            
+            <EditText
+                android:id="@+id/post_subject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_weight="1"
+                android:hint="@string/form_subject"
+                android:includeFontPadding="true"
+                android:singleLine="true" />
+            
+            <include
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/new_post_divider" />
+
+            <EditText
+                android:id="@+id/post_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/form_comment"
+                android:inputType="textMultiLine"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp" />
+            
+            <include
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/new_post_divider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp" >
+
+                <TextView
+                    android:id="@+id/post_file_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/form_file"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <Button
+                    android:id="@+id/post_file_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="@string/text_browse" />
+
+            </LinearLayout>
+
+            <include
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/new_post_divider" />
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="12dp"
+              >
+
+                 <ImageView
+                     android:id="@+id/post_captcha_image"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_weight="1"
+                     android:src="@android:drawable/ic_menu_search"
+                     android:contentDescription="@string/form_recaptcha"
+                     android:layout_gravity="center" />
+
+                 <ImageButton
+                     android:id="@+id/post_refresh_captcha"
+                     android:layout_width="48dp"
+                     android:layout_height="48dp"
+                     android:layout_weight="0"
+                     android:src="@drawable/ic_action_refresh_holo"
+                     android:contentDescription="@string/form_refresh"
+                     android:layout_gravity="center_vertical" />
+                 
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/post_captcha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/form_verification"
+                android:inputType="textNoSuggestions" />
+            
+            <include
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/new_post_divider"
+                android:layout_marginBottom="12dp"
+                 />
+
+        </LinearLayout>
+    </ScrollView>
+
+        
+    
+   
+</co.wakarimasen.chanexplorer.NewPostView>

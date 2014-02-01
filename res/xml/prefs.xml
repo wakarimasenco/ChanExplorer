@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:summary="Interface preferences"
+        android:title="Interface Settings" >
+       <Preference
+            android:enabled="true"
+            android:key="co.wakarimasen.chanexplorer.get_gold"
+            android:summary="Remove Ads, enable the auto-updater and support development."
+            android:title="Support ChanExplorer" />
+        <ListPreference
+            android:defaultValue="Auto"
+            android:entries="@array/theme_options"
+            android:entryValues="@array/theme_values"
+            android:key="co.wakarimasen.chanexplorer.prefs.theme"
+            android:summary=""
+            android:title="Theme"
+            />
+
+        <co.wakarimasen.chanexplorer.MultiSelectListPreference
+            android:defaultValue="@string/default_hidden"
+            android:dialogTitle="Hidden Boards"
+            android:entries="@array/boards_options"
+            android:entryValues="@array/boards_values"
+            android:key="co.wakarimasen.chanexplorer.prefs.hidden_boards"
+            android:summary=""
+            android:title="Hidden Boards" />
+        
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/textsz_options"
+            android:entryValues="@array/textsz_values"
+            android:key="co.wakarimasen.chanexplorer.prefs.text_size"
+            android:summary="Small"
+            android:title="Text Size" />
+        
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/replies_options"
+            android:entryValues="@array/replies_values"
+            android:key="co.wakarimasen.chanexplorer.prefs.no_replies"
+            android:summary="Default"
+            android:title="Thread Replies" />
+      <!--     
+        <CheckBoxPreference
+            android:key="co.wakarimasen.chanexplorer.prefs.spoilers"
+            android:summary="Enable spoliers. Tap to reveal."
+            android:defaultValue="true"
+            android:title="Spoilers" />
+ -->
+      <!--   
+        <CheckBoxPreference
+            android:key="co.wakarimasen.chanexplorer.prefs.disable_gif"
+            android:summary="Animated GIFs can cause force closes on pre-ICS phones. Check to disable animations."
+            android:defaultValue="false"
+            android:title="Disable GIF" /> -->
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:summary="Default post options"
+        android:title="Default Posting Settings" >
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="co.wakarimasen.chanexplorer.prefs.default_name"
+            android:summary=""
+            android:title="Name" />
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="co.wakarimasen.chanexplorer.prefs.default_email"
+            android:summary=""
+            android:title="Email" />
+        <!--
+        <EditTextPreference
+        android:key="co.wakarimasen.chanexplorer.prefs.password"
+        android:summary="Please enter your login username"
+        android:title="Username" />
+        -->
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:summary="Autoupdater settings"
+        android:title="Autoupdate Settings"
+        android:enabled="true"
+        android:key="auto_update_group" >
+        <EditTextPreference
+            android:defaultValue="0"
+            android:key="co.wakarimasen.chanexplorer.prefs.auto_update_interval"
+            android:summary="Off"
+            android:title="Auto-Update Interval" 
+            android:inputType="number" />
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/auto_options"
+            android:entryValues="@array/auto_values"
+            android:key="co.wakarimasen.chanexplorer.prefs.auto_updater_unit"
+            android:summary="Minutes"
+            android:title="Auto-Update Units" />
+<!-- 
+        <CheckBoxPreference
+            android:key="co.wakarimasen.chanexplorer.prefs.auto_updater_notify"
+            android:summary=""
+            android:title="Notify For New Posts" /> -->
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:summary="Images and download settings"
+        android:title="Image Settings" >
+        <EditTextPreference
+            android:defaultValue="25"
+            android:key="co.wakarimasen.chanexplorer.prefs.image_disk_cache"
+            android:summary=""
+            android:title="Image Cache Size"
+            android:inputType="number"  />
+        <EditTextPreference
+            android:defaultValue="downloads"
+            android:key="co.wakarimasen.chanexplorer.prefs.download_dir"
+            android:summary="downloads"
+            android:title="Download Directory"
+            android:enabled="true" />
+       <CheckBoxPreference
+            android:key="co.wakarimasen.chanexplorer.prefs.quickscroll"
+            android:summary="Enables the thumbnail quick scroll in the image viewer."
+            android:defaultValue="true"
+            android:title="Quick Scroll" />
+<!-- 
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/preload_options"
+            android:entryValues="@array/preload_values"
+            android:key="co.wakarimasen.chanexplorer.prefs.preload"
+            android:summary="Never"
+            android:title="Preload Images"
+            android:enabled="false" /> -->
+    </PreferenceCategory>
+     <PreferenceCategory
+        android:summary="4Chan Pass Settings"
+        android:title="4Chan Pass" >
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="co.wakarimasen.chanexplorer.prefs.4chanpass_token"
+            android:summary=""
+            android:title="4Chan Pass Token"
+             />
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="co.wakarimasen.chanexplorer.prefs.4chanpass_pin"
+            android:summary=""
+            android:title="4Chan Pass PIN"
+           />
+       <CheckBoxPreference
+            android:key="co.wakarimasen.chanexplorer.prefs.4chanpass_enabled"
+            android:summary="Select this option to enable 4Chan Pass support."
+            android:defaultValue="false"
+            android:title="4Chan Pass Support" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:summary="AboutChanExplorer"
+        android:title="About" >
+        <Preference
+            android:enabled="false"
+            android:summary="chanexplorer.wakarimasen.co"
+            android:title="Home" />
+        
+        <Preference
+            android:enabled="false"
+            android:summary="2.2.3"
+            android:title="Version" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

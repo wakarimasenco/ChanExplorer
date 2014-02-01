@@ -1,0 +1,45 @@
+<resources>
+
+    <style name="AppTheme" parent="android:Theme.Light" />
+    <style name="progressBarStyleLargeHolo">
+        <item name="android:indeterminateDrawable">@drawable/progress_large_holo</item>
+        <item name="android:minWidth">76dip</item>
+        <item name="android:maxWidth">76dip</item>
+        <item name="android:minHeight">76dip</item>
+        <item name="android:maxHeight">76dip</item>
+    </style>
+    <style name="progressBarStyleLargeYotsuba">
+        <item name="android:indeterminateDrawable">@drawable/progress_large_yotsuba</item>
+        <item name="android:minWidth">76dip</item>
+        <item name="android:maxWidth">76dip</item>
+        <item name="android:minHeight">76dip</item>
+        <item name="android:maxHeight">76dip</item>
+    </style>
+    <style name="progressBarStyleLargeYotsubaBlue">
+        <item name="android:indeterminateDrawable">@drawable/progress_large_yotsuba_blue</item>
+        <item name="android:minWidth">76dip</item>
+        <item name="android:maxWidth">76dip</item>
+        <item name="android:minHeight">76dip</item>
+        <item name="android:maxHeight">76dip</item>
+    </style>
+    <style name="progressBarStyleLargeTomorrow">
+        <item name="android:indeterminateDrawable">@drawable/progress_large_tomorrow</item>
+        <item name="android:minWidth">76dip</item>
+        <item name="android:maxWidth">76dip</item>
+        <item name="android:minHeight">76dip</item>
+        <item name="android:maxHeight">76dip</item>
+    </style>
+    <style name="progressBarStyleLargePhoton">
+        <item name="android:indeterminateDrawable">@drawable/progress_large_photon</item>
+        <item name="android:minWidth">76dip</item>
+        <item name="android:maxWidth">76dip</item>
+        <item name="android:minHeight">76dip</item>
+        <item name="android:maxHeight">76dip</item>
+    </style>
+
+    <color name="pinned_header_background">#ff202020</color>
+    <color name="pinned_header_text">#ffffffff</color>
+
+ 
+
+</resources>
