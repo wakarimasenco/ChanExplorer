@@ -16,7 +16,6 @@ ChanExplorer was built with Eclispe and targets Gingerbread (API Level 10).
 + [Android v7 Compat](http://developer.android.com/tools/support-library/setup.html)
 + [ActionBarSherlock (4.1.0)](http://actionbarsherlock.com/)
 + [SlidingMenu (7343c3cdc734f1aaf373c3a0cca8ed45fca21e6a)](http://github.com/jfeinstein10/SlidingMenu)
-+ [com.mindprod.Boyer](http://mindprod.com/precis/boyer.txt)
 + [Google Guava](https://code.google.com/p/guava-libraries/)
 
 ### Build (Eclispe + ADT)
@@ -28,8 +27,8 @@ Assuming you are already set up with Android:
 3. Right click the ChanExplorer project and select `Project Properties`
 4. Select the `Java Build Path` menu item on the left, then select the `Libraries` tab
 5. Click `Add JARs...`
-6. Add `boyer.jar`, `android-support-v4.jar` and `guava-13.0.jar`
-7. In the `Order and Export` tab, ensure `boyer.jar` and `guava-13.0.jar` are selected.
+6. Add `android-support-v4.jar` and `guava-13.0.jar`
+7. In the `Order and Export` tab, ensure `guava-13.0.jar` is selected.
 8. Select the `Android` menu item on the left.
 9. Under `Library` press `Add`
 10. Add the `ActionBarSherlock` and `SlidingMenu` projects.
