@@ -17,6 +17,7 @@ ChanExplorer was built with Eclispe and targets Gingerbread (API Level 10).
 + [ActionBarSherlock (4.1.0)](http://actionbarsherlock.com/)
 + [SlidingMenu (7343c3cdc734f1aaf373c3a0cca8ed45fca21e6a)](http://github.com/jfeinstein10/SlidingMenu)
 + [com.mindprod.Boyer](http://mindprod.com/precis/boyer.txt)
++ [Google Guava](https://code.google.com/p/guava-libraries/)
 
 ### Build (Eclispe + ADT)
 
