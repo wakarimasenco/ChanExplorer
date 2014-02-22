@@ -25,17 +25,21 @@ ChanExplorer was built with Eclispe and targets Gingerbread (API Level 10).
 
 Assuming you are already set up with Android:
 
-1. Import ChanExplorer into your Workspace
-2. Import ActionBarSherlock & SlidingMenu into your workspace
-3. Right click the ChanExplorer project and select `Project Properties`
-4. Select the `Java Build Path` menu item on the left, then select the `Libraries` tab
-5. Click `Add JARs...`
-6. Add `android-support-v4.jar` and `guava-13.0.jar`
-7. In the `Order and Export` tab, ensure `guava-13.0.jar` is selected.
-8. Select the `Android` menu item on the left.
-9. Under `Library` press `Add`
-10. Add the `ActionBarSherlock` and `SlidingMenu` projects.
-11. Use `ndk-build` to build the native libraries. `cd {chanexplorer}/jni && ndk-build` on OSX and Linux.
+Eclipse Build Instructions
+
+1. Clone ChanExplorer `git clone git@github.com:wakarimasenco/ChanExplorer.git`
+1. Import ChanExplorer into your Workspace as “Existing Android Code into Workspace” (File > Import > Android > Existing Android Code into Workspace)
+1. Git Clone `ActionBarSherlock@4.1.0` and `SlidingMenu@7343c3cdc73`. (ABS 4.1.0 can be downloaded here - [http://actionbarsherlock.com/download](http://actionbarsherlock.com/download), and for SlidingMenu you can run `git clone https://github.com/jfeinstein10/SlidingMenu && git checkout 7343c3cdc73`
+1. In SlidingMenu, delete the file `/src/com/slidingmenu/lib/app/SlidingMapActivity.java`
+1. In SlidingMenu, in the file `/src/com/slidingmenu/lib/app/SlidingFragmentActivity.java` replace `extends FragmentActivity implements SlidingActivityBase` with `extends com.actionbarsherlock.app.SherlockFragmentActivity implements SlidingActivityBase`
+1. Import the two projects into Eclipse using the same method as 2.
+1. Right Click the SlidingMenu project > Properties > Android > Library > Add
+1. Add the ActionBarSherlock project
+1. Right Click the ChanExplorer project > Properties > Android > Library > Add
+1. Add both the ActionBarSherlock and ChanExplorer projects.
+1. Use `ndk-build` to build the native libraries. `cd {chanexplorer}/jni && ndk-build` on OSX and Linux.
+
+You can then plug in your Android device and build a debug apk.
 
 After the following steps, you can simply export and APK, or run the project on your Android device. Open an issue if there are problems.
 
