@@ -148,7 +148,7 @@ public class Parser {
 							post.setFilename((getBetween("<span title=\"", "\"", boardHtml, boardBoyerHtml, boardBoyerHtml.indexOf("<div class=\"file", postPos))));
 						}
 						post.setSpoiler((fileInfo.indexOf("Spoiler Image") != -1));
-						post.setFilesize(getBetween("</a>-(", ",", fileInfo, 0));
+						post.setFilesize(getBetween("</a> (", ",", fileInfo, 0));
 						post.setThumbnail((getBetween("<img src=\"", "\"", boardHtml, boardBoyerHtml, boardBoyerHtml.indexOf("<div class=\"file", postPos))));
 						post.setThHeight(parseInt(getBetween("height: ", "px", boardHtml, boardBoyerHtml, boardBoyerHtml.indexOf("<div class=\"file", postPos))));
 						post.setThWidth(parseInt(getBetween("width: ", "px", boardHtml, boardBoyerHtml, boardBoyerHtml.indexOf("<div class=\"file", postPos))));
