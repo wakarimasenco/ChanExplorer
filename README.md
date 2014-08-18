@@ -5,6 +5,9 @@ ChanExplorer
 
 ChanExplorer is an 4Chan browser for Android. It is designed to augment 4chan for mobile browsing, it has a similar purpose to 4Chan X. Currently ChanExplorer is no longer available on the Play store.
 
+## Development
+ChanExplorer development has been revived by [Proplex](https://github.com/Proplex). Follow the new repo and get the updated app @ [https://github.com/Proplex/Leaf](https://github.com/Proplex/Leaf)
+
 ## Installing
 ChanExplorer is available on [F-Droid](https://f-droid.org/repository/browse/?fdid=co.wakarimasen.chanexplorer). Go to [F-Droid](https://f-droid.org/repository/browse/?fdid=co.wakarimasen.chanexplorer) ([https://f-droid.org/repository/browse/?fdid=co.wakarimasen.chanexplorer](https://f-droid.org/repository/browse/?fdid=co.wakarimasen.chanexplorer)) to download the latest APK. Alternatively, you can download the [F-Droid App](https://f-droid.org/), and install it from there which will also provide you with automated updates.
 
