@@ -1,5 +1,6 @@
 package co.wakarimasen.chanexplorer.imageboard;
 
+//Import the needed libraries for the program to function
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -7,9 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import android.util.SparseArray;
-
 import com.mindprod.boyer.Boyer;
 
 /**
@@ -21,7 +20,8 @@ import com.mindprod.boyer.Boyer;
 
 public class Parser {
 
-	//References created to determine if parsed string matches the proper format needed by the main program
+	//References created to determine if parsed string matches the proper format needed by the main program for:
+	//post ommision, image ommision, size, identity check, and comments quoted
 	private final static Pattern post_omitted = Pattern.compile("([0-9]+) post[s]{0,1} omitted");
 	private final static Pattern post_image_omitted = Pattern.compile("([0-9]+) post[s]{0,1} and ([0-9]+) image repl");
 	private final static Pattern sz_match = Pattern.compile("([0-9]+)x([0-9]+)");
@@ -40,6 +40,7 @@ public class Parser {
 	*@return final_posts     Gives an array of all posts in the board ordered properly
 	*/
 	public static Post[] parse(String boardHtml, boolean threaded, Set<Integer> ignored, int threadReplies, int greenTextColor) throws ChanParserException, BannedException, NotFoundException{
+		//Initialize the variables needed to parse through the board
 		List<Post> posts = new ArrayList<Post>();
 		SparseArray<Post> r_posts = new SparseArray<Post>();
 		Boyer boardBoyerHtml = new Boyer(boardHtml);
@@ -65,10 +66,11 @@ public class Parser {
 
 		//Parser goes through each thread on the board and decomposes them into singular posts
 		while ((threadPos = boardBoyerHtml.indexOf("<div class=\"thread\"", parserPos)) != -1) {
+			//The parser builds the identificatio of the thread
 			threadId = parseInt(getBetween("id=\"t", "\">", boardHtml, boardBoyerHtml, threadPos));
 			replies = 0;
 			nextThreadPos = boardBoyerHtml.indexOf("<div class=\"thread\"", threadPos + 19);
-			//
+			//Check if the thread has any content in it
 			if (nextThreadPos == -1) {
 				nextThreadPos = boardHtml.length();
 			}
@@ -85,10 +87,11 @@ public class Parser {
 
 				//Checks if the current post is the header of the thread
 				if (post.isThread()) {
-					//Check if the thread 
+					//Check if the thread header contains an image and/or post attached to it
 					if (getBetween("</blockquote>", "<hr>", boardHtml, boardBoyerHtml, postPos).indexOf("class=\"summary desktop\"") != -1) {
 						String oms = getBetween("<span class=\"summary desktop\">", "</span>", boardHtml, boardBoyerHtml, postPos);
 						Matcher m1 = post_image_omitted.matcher(oms);
+						//Check if the image or post omission matches the regex for it
 						if (m1.find()) {
 							post.setOmitted(parseInt(m1.group(1)), parseInt(m1.group(2)));
 						} else {
@@ -206,59 +209,59 @@ public class Parser {
 				}
 				//Check if the post has been ignored by the user viewing the board
 				if ((ignored == null || !ignored.contains(post.getThreadId())) &&
-						(!isBoard || threadReplies == 0 || replies < threadReplies)) {
+					(!isBoard || threadReplies == 0 || replies < threadReplies)) {
 					//Once the post object has been clearly identified, add it to the other posts
 					posts.add(post);
-					r_posts.put(post.getId(), post);
-					replies++;
-				}
+				r_posts.put(post.getId(), post);
+				replies++;
+			}
 
 				//Set the position of the final post
-				finalPost = postPos = boardBoyerHtml.indexOf("</blockquote>", postPos) + 13;
+			finalPost = postPos = boardBoyerHtml.indexOf("</blockquote>", postPos) + 13;
 
-			}
+		}
 			//Set the position of the parser to the ending of the previous thread
-			parserPos = finalPost;
-		}
+		parserPos = finalPost;
+	}
 		//Stop parsing if there are no posts in the board
-		if (posts.size() == 0) {
-			throw new ChanParserException("No posts were found.");
-		}
+	if (posts.size() == 0) {
+		throw new ChanParserException("No posts were found.");
+	}
 		//Search through all the posts for any quotes in them
-		for (int i=0; i<posts.size(); i++) {
-			Matcher m1 = quote_match.matcher(posts.get(i).getComment());
-			while (m1.find()) {
+	for (int i=0; i<posts.size(); i++) {
+		Matcher m1 = quote_match.matcher(posts.get(i).getComment());
+		while (m1.find()) {
 				//Find the quoted post and add all the references to it by other posts
-				int id = Integer.parseInt(m1.group(1));
-				Post p = r_posts.get(id);
-				if (p != null && (p.getReplies() == null || !p.getReplies().contains(p.getId()))) {
-					p.addReply(posts.get(i).getId());
-				}
+			int id = Integer.parseInt(m1.group(1));
+			Post p = r_posts.get(id);
+			if (p != null && (p.getReplies() == null || !p.getReplies().contains(p.getId()))) {
+				p.addReply(posts.get(i).getId());
 			}
 		}
+	}
 
 		//Ensure all replies to a post are ordered right after the post if the board allows replies
-		Post[] final_posts = new Post[posts.size()];
-		if (threaded) {
-			for (int i=0; i<final_posts.length; i++) {
-				Post p = posts.get(i);
-				final_posts[i] = p;
+	Post[] final_posts = new Post[posts.size()];
+	if (threaded) {
+		for (int i=0; i<final_posts.length; i++) {
+			Post p = posts.get(i);
+			final_posts[i] = p;
 				//If the post has references to replies, ensure they appear after the parent post
-				if (p.hasReplies()) {;
-					for (int j=0; j<p.getReplies().size(); j++) {
-						Post r =  r_posts.get(p.getReplies().get(j));
-						if (r != null) {
-							final_posts[++i] = r;
-							r_posts.delete(p.getReplies().get(j));
-						}
+			if (p.hasReplies()) {;
+				for (int j=0; j<p.getReplies().size(); j++) {
+					Post r =  r_posts.get(p.getReplies().get(j));
+					if (r != null) {
+						final_posts[++i] = r;
+						r_posts.delete(p.getReplies().get(j));
 					}
 				}
 			}
-		} else {
-			posts.toArray(final_posts);
 		}
-		return final_posts;
+	} else {
+		posts.toArray(final_posts);
 	}
+	return final_posts;
+}
 
 	/**
 	* Function that converts the needed string into an integer that will notify if error occured.
