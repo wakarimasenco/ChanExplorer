@@ -1,3 +1,6 @@
+/**
+* Pavle Arezina. MacID: arezinp McMaster University, Software Engineering
+*/
 package co.wakarimasen.chanexplorer.imageboard;
 
 //Import the needed libraries for the program to function
