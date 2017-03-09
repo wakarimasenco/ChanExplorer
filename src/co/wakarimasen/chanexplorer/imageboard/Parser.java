@@ -12,6 +12,13 @@ import android.util.SparseArray;
 
 import com.mindprod.boyer.Boyer;
 
+/**
+* Parser for 4Chan
+*
+* A parser that scrapes a board selected by the user for all the posts
+* and saves it into an array of objects that store the posts
+*/
+
 public class Parser {
 
 	//References created to determine if parsed string matches the proper format needed by the main program
@@ -26,10 +33,11 @@ public class Parser {
 	* to be utilized by the main program to display them in a mobile framework.
 	*
 	*@param boardHtml        Stores the location of the page being parsed
-	*@param threaded		 Determines if this whole page is in response another post
+	*@param threaded		 Determines if the board allows replies
 	*@param ignored			 Holds the set of ignored replies in the page
 	*@param threadReplies	 Stores how many replies are in the page being parsed
-	*@param greenTextColor	 Stores the 
+	*@param greenTextColor	 Stores the amount of specialized text in the posts
+	*@return final_posts     Gives an array of all posts in the board ordered properly
 	*/
 	public static Post[] parse(String boardHtml, boolean threaded, Set<Integer> ignored, int threadReplies, int greenTextColor) throws ChanParserException, BannedException, NotFoundException{
 		List<Post> posts = new ArrayList<Post>();
@@ -108,9 +116,8 @@ public class Parser {
 					post.setSticky(true);
 				}
 
-				post.setIdenIcon(null);
-
 				//Determine the icon of the user who submitted the post
+				post.setIdenIcon(null);
 				if (namesubject.indexOf("\"identityIcon\"") != -1) {
 					String rel = getBetween("<span class=\"name\">", "<span class=\"subject", boardHtml, boardBoyerHtml, postPos);
 					Matcher m1 = iden_match.matcher(rel);
@@ -131,14 +138,15 @@ public class Parser {
 				} else {
 					post.setEmail(null);
 				}
-				//Determine the name of the user of the post
+				//Determine the name of the user who submitted the post
 				if (post.isMod()) {
 					post.setName((getBetween("style=\"color:#800080\">", "</span>", boardHtml, boardBoyerHtml, postPos)));
 				} else {
 					post.setName((getBetween("<span class=\"name\">", "</span>", boardHtml, boardBoyerHtml, postPos)));
 				}
+				
+				//Determine the tripcode in the post if any are present
 				post.setTripcode(null);
-				//Check if there is a tripcode attached to the post and save it to the post if true
 				if (namesubject.indexOf("postertrip") != -1) {
 					post.setTripcode((getBetween("<span class=\"postertrip\">", "</span>", boardHtml, boardBoyerHtml, postPos)));
 				}
@@ -148,39 +156,47 @@ public class Parser {
 				} else {
 					post.setPosterId(null);
 				}
-				//Check if the post has a country flag attached to it and save it to the post if true
+				//Check if the post has a country flag attached to it 
 				if (namesubject.indexOf("countryFlag") != -1) {
+					//Determine what country flag is attached to the post
 					String flg = (getBetween("<img src=\"", "class=\"countryFlag\"", boardHtml, boardBoyerHtml, postPos));
 					post.setFlag(new String(flg.substring(0, flg.indexOf('"'))));
 				} else {
 					post.setFlag(null);
 				}
-				// Subject
+				// Determine the subject title of the post
 				post.setSubject((getBetween("<span class=\"subject\">", "</span>", boardHtml, boardBoyerHtml, boardBoyerHtml.indexOf("postInfo desktop", postPos))));
-				// Date
+				// Determine the date the post was created
 				post.setTimestamp(parseLong(getBetween("data-utc=\"", "\"", boardHtml, boardBoyerHtml, postPos)));
-				// Comment
+				// Determine the comment attached to the post
 				post.setComment((getBetween("<blockquote class=\"postMessage\" id=\"m"+ post.getId() +"\">", "</blockquote>", boardHtml, boardBoyerHtml, postPos)));
 
-				// File
+				//Check if the post has an image file attached
 				if (getBetween("<span class=\"nameBlock", "</blockquote>", boardHtml, boardBoyerHtml, postPos).indexOf("class=\"file\"") != -1) {
 					post.setFile(true);
 					String fileInfo = getBetween("<div class=\"fileText\"", "</div>", boardHtml, boardBoyerHtml, postPos);
+
+					//Check if the file has been deleted
 					if (fileInfo.length() == 0) {
 						post.setFileDeleted(true);
 					} else {
 						post.setFileDeleted(false);
 						post.setImage((getBetween("File: <a href=\"", "\"", boardHtml, boardBoyerHtml, postPos)));
+
+						//Check if the user assigned a title to the image
 						if (fileInfo.indexOf("<span title=") == -1) {
 							post.setFilename((getBetween("<span>", "</span>", boardHtml, boardBoyerHtml, boardBoyerHtml.indexOf("<div class=\"file", postPos))));
 						} else {
 							post.setFilename((getBetween("<span title=\"", "\"", boardHtml, boardBoyerHtml, boardBoyerHtml.indexOf("<div class=\"file", postPos))));
 						}
+
+						//Determine the properties of the image
 						post.setSpoiler((fileInfo.indexOf("Spoiler Image") != -1));
 						post.setFilesize(getBetween("</a> (", ",", fileInfo, 0));
 						post.setThumbnail((getBetween("<img src=\"", "\"", boardHtml, boardBoyerHtml, boardBoyerHtml.indexOf("<div class=\"file", postPos))));
 						post.setThHeight(parseInt(getBetween("height: ", "px", boardHtml, boardBoyerHtml, boardBoyerHtml.indexOf("<div class=\"file", postPos))));
 						post.setThWidth(parseInt(getBetween("width: ", "px", boardHtml, boardBoyerHtml, boardBoyerHtml.indexOf("<div class=\"file", postPos))));
+						//Check if the image has the proper file size formatting
 						Matcher m1 = sz_match.matcher(fileInfo);
 						if (m1.find()) {
 							post.setWidth(parseInt(m1.group(1)));
@@ -188,24 +204,31 @@ public class Parser {
 						}
 					}
 				}
+				//Check if the post has been ignored by the user viewing the board
 				if ((ignored == null || !ignored.contains(post.getThreadId())) &&
 						(!isBoard || threadReplies == 0 || replies < threadReplies)) {
+					//Once the post object has been clearly identified, add it to the other posts
 					posts.add(post);
 					r_posts.put(post.getId(), post);
 					replies++;
 				}
+
+				//Set the position of the final post
 				finalPost = postPos = boardBoyerHtml.indexOf("</blockquote>", postPos) + 13;
 
 			}
+			//Set the position of the parser to the ending of the previous thread
 			parserPos = finalPost;
 		}
+		//Stop parsing if there are no posts in the board
 		if (posts.size() == 0) {
 			throw new ChanParserException("No posts were found.");
 		}
-		//for (int i=posts.size()-1; i>=0; i--) {
+		//Search through all the posts for any quotes in them
 		for (int i=0; i<posts.size(); i++) {
 			Matcher m1 = quote_match.matcher(posts.get(i).getComment());
 			while (m1.find()) {
+				//Find the quoted post and add all the references to it by other posts
 				int id = Integer.parseInt(m1.group(1));
 				Post p = r_posts.get(id);
 				if (p != null && (p.getReplies() == null || !p.getReplies().contains(p.getId()))) {
@@ -213,11 +236,14 @@ public class Parser {
 				}
 			}
 		}
+
+		//Ensure all replies to a post are ordered right after the post if the board allows replies
 		Post[] final_posts = new Post[posts.size()];
 		if (threaded) {
 			for (int i=0; i<final_posts.length; i++) {
 				Post p = posts.get(i);
 				final_posts[i] = p;
+				//If the post has references to replies, ensure they appear after the parent post
 				if (p.hasReplies()) {;
 					for (int j=0; j<p.getReplies().size(); j++) {
 						Post r =  r_posts.get(p.getReplies().get(j));
