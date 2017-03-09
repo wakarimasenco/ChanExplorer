@@ -14,12 +14,23 @@ import com.mindprod.boyer.Boyer;
 
 public class Parser {
 
+	//References created to determine if parsed string matches the proper format needed by the main program
 	private final static Pattern post_omitted = Pattern.compile("([0-9]+) post[s]{0,1} omitted");
 	private final static Pattern post_image_omitted = Pattern.compile("([0-9]+) post[s]{0,1} and ([0-9]+) image repl");
 	private final static Pattern sz_match = Pattern.compile("([0-9]+)x([0-9]+)");
 	private final static Pattern iden_match = Pattern.compile("<img src=\"([^\"]+)\" alt=\"[^\"]+\" title=\"[^\"]+\" class=\"identityIcon\"");
 	private final static Pattern quote_match = Pattern.compile("ass=\"quotelink\">&gt;&gt;([0-9]+)");
 
+	/**
+	* Parses through the whole board and breaks it down into individual posts
+	* to be utilized by the main program to display them in a mobile framework.
+	*
+	*@param boardHtml        Stores the location of the page being parsed
+	*@param threaded		 Determines if this whole page is in response another post
+	*@param ignored			 Holds the set of ignored replies in the page
+	*@param threadReplies	 Stores how many replies are in the page being parsed
+	*@param greenTextColor	 Stores the 
+	*/
 	public static Post[] parse(String boardHtml, boolean threaded, Set<Integer> ignored, int threadReplies, int greenTextColor) throws ChanParserException, BannedException, NotFoundException{
 		List<Post> posts = new ArrayList<Post>();
 		SparseArray<Post> r_posts = new SparseArray<Post>();
@@ -31,29 +42,42 @@ public class Parser {
 		int nextThreadPos;
 		int threadId;
 		int replies;
+
+		//Determine if the board exists to parse through
 		boolean isBoard = boardBoyerHtml.indexOf("<div class=\"postingMode desktop\">Posting mode: Reply</div>") == -1;
+
+		//Stop the parsing if the board cannot be found
 		if (boardBoyerHtml.indexOf("<title>4chan - 404 Not Found</title>") != -1) {
 			throw new NotFoundException();
 		}
+		//Stop the parsing if the board is banned
 		if (boardBoyerHtml.indexOf("<title>4chan - Banned</title>") != -1) {
 			throw new BannedException();
 		}
+
+		//Parser goes through each thread on the board and decomposes them into singular posts
 		while ((threadPos = boardBoyerHtml.indexOf("<div class=\"thread\"", parserPos)) != -1) {
-			// Get the thread id
 			threadId = parseInt(getBetween("id=\"t", "\">", boardHtml, boardBoyerHtml, threadPos));
 			replies = 0;
 			nextThreadPos = boardBoyerHtml.indexOf("<div class=\"thread\"", threadPos + 19);
+			//
 			if (nextThreadPos == -1) {
 				nextThreadPos = boardHtml.length();
 			}
 			postPos = threadPos;
 			finalPost = threadPos + 19;
+
+			//Parser goes through each post in the thread
 			while ((postPos = boardBoyerHtml.indexOf("<div class=\"postContainer", postPos)) != -1 && postPos < nextThreadPos) {
+				//The parser builds the identification of the post
 				Post post = new Post(greenTextColor);
 				post.setThreadId(threadId);
 				post.setId(parseInt(getBetween("id=\"pc", "\"", boardHtml, boardBoyerHtml, postPos)));
 				String namesubject = getBetween("<span class=\"name\">", "<span class=\"subject\">", boardHtml, boardBoyerHtml, postPos);
+
+				//Checks if the current post is the header of the thread
 				if (post.isThread()) {
+					//Check if the thread 
 					if (getBetween("</blockquote>", "<hr>", boardHtml, boardBoyerHtml, postPos).indexOf("class=\"summary desktop\"") != -1) {
 						String oms = getBetween("<span class=\"summary desktop\">", "</span>", boardHtml, boardBoyerHtml, postPos);
 						Matcher m1 = post_image_omitted.matcher(oms);
@@ -67,33 +91,38 @@ public class Parser {
 						}
 					}
 				}
-				// isAdmin
+				// Check if the post was made by an Admin
 				if (getBetween("<span class=\"nameBlock", "<span class=\"name\">", boardHtml, boardBoyerHtml, postPos).indexOf("capcodeAdmin") != -1) {
 					post.setAdmin(true);
 				}
-				// isMod
+				// Check if the post was by a Mod
 				if (getBetween("<span class=\"name\">", "</span>", boardHtml, boardBoyerHtml, postPos).indexOf("\"color:#800080\"") != -1) {
 					post.setMod(true);
 				}
-				// isLocked
+				// Check if the post is locked
 				if (namesubject.indexOf("title=\"Closed\"") != -1) {
 					post.setLocked(true);
 				}
-				// isSticky
+				// Check if the post is stickied to the top of the thread
 				if (namesubject.indexOf("title=\"Sticky\"") != -1) {
 					post.setSticky(true);
 				}
-				// idenIcon
+
 				post.setIdenIcon(null);
+
+				//Determine the icon of the user who submitted the post
 				if (namesubject.indexOf("\"identityIcon\"") != -1) {
 					String rel = getBetween("<span class=\"name\">", "<span class=\"subject", boardHtml, boardBoyerHtml, postPos);
 					Matcher m1 = iden_match.matcher(rel);
+
+					//If the identity icon follows the proper format, add it to the post
 					if (m1.find()) {
 						post.setIdenIcon(m1.group(1));
 					}
 				}
-				// Email
+				//Determine if an email is attached to the post
 				if (getBetween("<span class=\"subject\">", "<blockquote", boardHtml, boardBoyerHtml, postPos).indexOf("mailto:") != -1) {
+					//Attempt is made to decode the url into a readable format
 					try {
 						post.setEmail(URLDecoder.decode(getBetween("href=\"mailto:", "\"", boardHtml, boardBoyerHtml, postPos), "UTF-8"));
 					} catch (UnsupportedEncodingException e) {
@@ -102,24 +131,24 @@ public class Parser {
 				} else {
 					post.setEmail(null);
 				}
-				// Name
+				//Determine the name of the user of the post
 				if (post.isMod()) {
 					post.setName((getBetween("style=\"color:#800080\">", "</span>", boardHtml, boardBoyerHtml, postPos)));
 				} else {
 					post.setName((getBetween("<span class=\"name\">", "</span>", boardHtml, boardBoyerHtml, postPos)));
 				}
-				// Trip
 				post.setTripcode(null);
+				//Check if there is a tripcode attached to the post and save it to the post if true
 				if (namesubject.indexOf("postertrip") != -1) {
 					post.setTripcode((getBetween("<span class=\"postertrip\">", "</span>", boardHtml, boardBoyerHtml, postPos)));
 				}
-				// Id
+				//Check if there is an id for the poster and save it to the post if true
 				if (namesubject.indexOf("posteruid") != -1) {
 					post.setPosterId((getBetween("posts by this ID\">", "</span>", boardHtml, boardBoyerHtml, postPos)));
 				} else {
 					post.setPosterId(null);
 				}
-				// sp/Flag
+				//Check if the post has a country flag attached to it and save it to the post if true
 				if (namesubject.indexOf("countryFlag") != -1) {
 					String flg = (getBetween("<img src=\"", "class=\"countryFlag\"", boardHtml, boardBoyerHtml, postPos));
 					post.setFlag(new String(flg.substring(0, flg.indexOf('"'))));
