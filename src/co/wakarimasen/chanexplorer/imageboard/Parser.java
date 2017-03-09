@@ -205,6 +205,11 @@ public class Parser {
 		return final_posts;
 	}
 
+	/**
+	* Function that converts the needed string into an integer that will notify if error occured.
+	*
+	*@param str The string input that will be converted into a 32 bit integer
+	*/
 	private static final int parseInt(String str) throws ChanParserException {
 		try {
 			return Integer.parseInt(str);
@@ -212,7 +217,11 @@ public class Parser {
 			throw new ChanParserException("Tried to parse "+str+" into integer.");
 		}
 	}
-
+	/**
+	* Function that converts the needed string into a long number that will notify if error occured.
+	*
+	*@param str The string input that will be converted into a 64 bit integer
+	*/
 	private static final long parseLong(String str) throws ChanParserException {
 		try {
 			return Long.parseLong(str);
@@ -221,6 +230,15 @@ public class Parser {
 		}
 	}
 
+	/**
+	* Function that selects the string inbetween two selected words.
+	* Error occurs if the string wanted does not occur in the input string.
+	*
+	*@param start- The beginning of the substring that needs to be found.
+	*@param end- The end of the substring that needs to be found.
+	*@param start_from - The index to start searching from in the input string.
+	*@param haystack- The input string that will be searched by the function.
+	*/
 	private static final String getBetween(String start, String end, String haystack, int start_from) throws ChanParserException {
 		try {
 			return new String(haystack.substring((start_from = haystack.indexOf(start, start_from)+start.length()), haystack.indexOf(end, start_from)));
@@ -229,6 +247,16 @@ public class Parser {
 		}
 	}
 
+	/**
+	* Function that selects the string inbetween two selected words using Boyer-Moore string search
+	* Error occurs if the string wanted does not occur in the input string.
+	*
+	*@param start- The beginning of the substring that needs to be found.
+	*@param end- The end of the substring that needs to be found.
+	*@param start_from - The index to start searching from in the input string.
+	*@param boyer- A more efficient method to search the beginning and end of the substring.
+	*@param haystack- The input string that will be searched by the function.
+	*/
 	private static final String getBetween(String start, String end, String haystack, Boyer boyer, int start_from) throws ChanParserException {
 		try {
 			return new String(haystack.substring((start_from = boyer.indexOf(start, start_from)+start.length()), boyer.indexOf(end, start_from)));
@@ -237,6 +265,10 @@ public class Parser {
 		}
 	}
 
+	/**
+	* If parser encounters an error, send relevant code to the main program
+	* and display the error that occured.
+	*/
 	public static class ChanParserException extends Exception {
 		private static final long serialVersionUID = 1667660700840058145L;
 		public ChanParserException(String message) {
@@ -244,10 +276,16 @@ public class Parser {
 		}
 	}
 
+	/**
+	* If the location is banned from 4chan, then send relevant code to the main program.
+	*/
 	public static class BannedException extends Exception {
 		private static final long serialVersionUID = 1667660700840058146L;
 	}
 
+	/**
+	* If the location does not exist on 4chan, then send relevant code to the main program
+	*/
 	public static class NotFoundException extends Exception {
 		private static final long serialVersionUID = 1667660700840058147L;
 	}
